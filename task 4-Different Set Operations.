@@ -1,0 +1,10 @@
+E = {0, 2, 4, 6, 8}
+N = {1, 2, 3, 4, 5}
+union=E|N
+print(union)
+intersection=E&N
+print(intersection)
+diff=E-N
+print(diff)
+symmetric_diff=E^N
+print(symmetric_diff)
