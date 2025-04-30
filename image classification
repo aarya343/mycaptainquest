@@ -1,0 +1,43 @@
+# Import libraries
+from sklearn.datasets import load_digits
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score, confusion_matrix
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# 1. Load dataset (8x8 pixel images of digits 0-9)
+digits = load_digits()
+X = digits.images  # Original image data (3D)
+y = digits.target  # Labels (0-9)
+
+# 2. Prepare the data
+# Flatten images from 8x8 to 64 pixels
+n_samples = len(X)
+X = X.reshape((n_samples, -1))  # Now 2D array (samples × 64 features)
+
+# 3. Split data (80% train, 20% test)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# 4. Create and train Random Forest
+# (n_estimators = number of decision trees)
+model = RandomForestClassifier(n_estimators=100, random_state=42)
+model.fit(X_train, y_train)
+
+# 5. Make predictions and evaluate
+predictions = model.predict(X_test)
+accuracy = accuracy_score(y_test, predictions)
+print(f"Model Accuracy: {accuracy:.2%}")
+
+# 6. Visualize a test sample
+sample_idx = 10
+plt.imshow(X_test[sample_idx].reshape(8, 8), cmap='gray')
+plt.title(f"True: {y_test[sample_idx]}, Predicted: {predictions[sample_idx]}")
+plt.show()
+
+# 7. Confusion matrix (optional)
+cm = confusion_matrix(y_test, predictions)
+sns.heatmap(cm, annot=True, fmt='d')
+plt.xlabel('Predicted')
+plt.ylabel('True')
+plt.show()
